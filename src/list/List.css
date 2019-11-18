@@ -1,0 +1,24 @@
+.name{
+    color: #333;
+    font-size: 14px;
+    margin-top: 4px;
+    width:100%; 
+    white-space:nowrap; 
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+.price{
+    margin: -10px auto 0;
+    width: 80%;
+}
+.price p{
+    float: left;
+}
+.price .buy{
+    float: right;
+    padding: 3px 5px;
+    border-radius: 20px;
+    color: coral;
+    border: 1px solid coral;
+    margin-top: 12px;
+}

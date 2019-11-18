@@ -1,12 +1,18 @@
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { PullToRefresh, Button } from 'antd-mobile';
+import { PullToRefresh, Button,Grid } from 'antd-mobile';
+import './List.css';
 
 function genData(prev = []) {
   const dataArr = prev;
   for (let i = 0; i < 20; i++) {
-    dataArr.push(i);
+    dataArr.push({
+      id: `${i}`,
+      icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
+      text: `wine${i}`,
+      price: `${2*i}`
+    });
   }
   return dataArr;
 }
@@ -16,7 +22,7 @@ class Demo extends React.Component {
     super(props);
     this.state = {
       refreshing: false,
-      down: true,
+      down: false,
       height: document.documentElement.clientHeight,
       data: [],
     };
@@ -32,21 +38,16 @@ class Demo extends React.Component {
 
   render() {
     return (<div>
-      <Button
-        style={{ marginBottom: 15 }}
-        onClick={() => this.setState({ down: !this.state.down })}
-      >
-        direction: {this.state.down ? 'down' : 'up'}
-      </Button>
+      
       <PullToRefresh
-        damping={60}
+        damping={100}
         ref={el => this.ptr = el}
         style={{
           height: this.state.height,
           overflow: 'auto',
         }}
         indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
-        direction={this.state.down ? 'down' : 'up'}
+        direction={'up'}
         refreshing={this.state.refreshing}
         onRefresh={() => {
           this.setState({ 
@@ -59,11 +60,28 @@ class Demo extends React.Component {
           }, 1000);
         }}
       >
-        {this.state.data.map(i => (
+        {/* {this.state.data.map(i => (
           <div key={i} style={{ textAlign: 'center', padding: 20 }}>
             {this.state.down ? 'pull down' : 'pull up'} {i}
           </div>
-        ))}
+        ))} */}
+          <Grid data={this.state.data}
+            columnNum={2}
+            hasLine={false}
+            renderItem={dataItem => (
+              <div style={{ padding: '12.5px' }}>
+                <img src={dataItem.icon} style={{ width: '75%'}} alt="" onClick={()=>alert(`${dataItem.id}`)} />
+                <div className="name">
+                  <span>{dataItem.text}</span>
+                </div>
+                <div className="price">
+                  <p>￥{dataItem.price}</p>
+                  <div className="buy" onClick={()=>alert(`${dataItem.id}`)}>立即购买</div>
+                  <div style={{clear: 'both'}}></div>
+                </div>
+              </div>
+            )}
+          />
       </PullToRefresh>
     </div>);
   }

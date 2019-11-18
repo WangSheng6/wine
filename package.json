@@ -29,6 +29,7 @@
     ]
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.12.2",
     "customize-cra": "^0.9.1",
     "react-app-rewired": "^2.1.5",
     "react-router-dom": "^5.1.2"
