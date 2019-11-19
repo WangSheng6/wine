@@ -12,7 +12,7 @@ import Home from './home/App'
 import List from './list/List'
 
 ReactDOM.render(
-  <BrowserRouter basename='/wine/'>
+  <BrowserRouter basename='/wine'>
     <Route exact path='/' component={Home}/>
     <Route exact path='/list' component={List}/>
   </BrowserRouter>
