@@ -27,6 +27,9 @@ class Demo extends React.Component {
       data: [],
     };
   }
+  change(state){
+    this.props.history.push({pathname:'/list/'+ state.id})
+  }
 
   componentDidMount() {
     const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
@@ -70,13 +73,14 @@ class Demo extends React.Component {
             hasLine={false}
             renderItem={dataItem => (
               <div style={{ padding: '12.5px' }}>
-                <img src={dataItem.icon} style={{ width: '75%'}} alt="" onClick={()=>alert(`${dataItem.id}`)} />
+                <img src={dataItem.icon} style={{ width: '75%'}} alt="" onClick={()=>this.change({'id':dataItem.id})} />
                 <div className="name">
                   <span>{dataItem.text}</span>
                 </div>
                 <div className="price">
                   <p>￥{dataItem.price}</p>
                   <div className="buy" onClick={()=>alert(`${dataItem.id}`)}>立即购买</div>
+                  
                   <div style={{clear: 'both'}}></div>
                 </div>
               </div>
