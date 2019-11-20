@@ -13,7 +13,7 @@ import List from './list/List'
 import Detail from './detail/Detail'
 
 ReactDOM.render(
-  <HashRouter basename='/wine/'>
+  <HashRouter>
     <Route exact path='/' component={Home}/>
     <Route exact path='/list' component={List}/>
     <Route exact path='/list/:id' component={Detail}/>
