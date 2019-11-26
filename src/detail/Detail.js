@@ -2,23 +2,38 @@ import React from 'react';
 //import ReactDOM from 'react-dom';
 import { Carousel, WingBlank, Card, WhiteSpace } from 'antd-mobile';
 import './Detail.css';
+import Bmob from "hydrogen-js-sdk";
+Bmob.initialize("57b561f7d48f3c2e", "191019");
 
 class Detail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             goodsID: props.match.params.id,
-            data: ['1', '2', '3'],
+            data: {},
+            banner: [],
+            intro: [],
             imgHeight: 176
         };
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            this.setState({
-                data: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI'],
-            });
-        }, 100);
+        const query = Bmob.Query("wine");
+        query.equalTo("goodsID", "==", this.state.goodsID*1);
+        query.find().then(res => {
+            //console.log(res)
+
+            const data = res[0]
+            console.log(data)
+            setTimeout(() => {
+                this.setState({
+                    data: data,
+                    banner: data.Banner.split('||'),
+                    intro: data.intro.split('||')
+                });
+            }, 100);
+        });
+        
     }
 
     render() {
@@ -31,14 +46,14 @@ class Detail extends React.Component {
                         beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
                         afterChange={index => console.log('slide to', index)}
                     >
-                        {this.state.data.map(val => (
+                        {this.state.banner.map(val => (
                             <a
                                 key={val}
                                 href="http://www.alipay.com"
                                 style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                             >
                                 <img
-                                    src={`https://zos.alipayobjects.com/rmsportal/${val}.png`}
+                                    src={val}
                                     alt=""
                                     style={{ width: '100%', verticalAlign: 'top' }}
                                     onLoad={() => {
@@ -51,8 +66,8 @@ class Detail extends React.Component {
                         ))}
                     </Carousel>
                 </WingBlank>
-                <h3>用于组织信息和操作，通常也作为详细信息的入口。</h3>
-                <p>￥888</p>
+                <h3>{this.state.data.Name}</h3>
+                <p>￥{this.state.data.Price}</p>
                 <WingBlank size="lg">
                     <WhiteSpace size="lg" />
                     <Card>
@@ -61,14 +76,14 @@ class Detail extends React.Component {
                         />
                         <Card.Body>
                             <div>
-                                {this.state.data.map(val => (
+                                {this.state.intro.map(val => (
                                     <a
                                         key={val}
                                         href="http://www.alipay.com"
                                         style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                                     >
                                         <img
-                                            src={`https://zos.alipayobjects.com/rmsportal/${val}.png`}
+                                            src={`${val}`}
                                             alt=""
                                             style={{ width: '100%', verticalAlign: 'top' }}
                                             onLoad={() => {
@@ -85,7 +100,7 @@ class Detail extends React.Component {
                     </Card>
                     <WhiteSpace size="lg" />
                 </WingBlank>
-                {this.state.goodsID}
+                
             </div>
         )
     }
