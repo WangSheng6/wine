@@ -11,14 +11,15 @@
     margin: -7px auto 0;
     width: 80%;
 }
-.price p{
-    float: left;
-}
 .price .buy{
     float: right;
     padding: 3px 5px;
-    border-radius: 20px;
+    border-radius: .3rem;
     color: coral;
+    font-size: .3rem;
     border: 1px solid coral;
-    margin-top: 12px;
+    margin-top: .3rem;
+}
+.am-pull-to-refresh-indicator{
+    font-size: .3rem;
 }

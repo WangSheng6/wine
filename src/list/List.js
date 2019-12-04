@@ -9,37 +9,6 @@ var query = Bmob.Query("wine");
 var dataArr = [];
 var hei;
 
-function genData(prev = []) {
-  const dataArr = prev;
-  const query = Bmob.Query("wine");
-  //const res = await query.find();
-  //console.log(res)
-  query.find().then(res => {
-    console.log(res.length)
-    
-    for (let i = 0; i < res.length; i++) {
-      dataArr.push({
-        id: `${res[i]['ID']}`,
-        icon: res[i]['Banner'].split(',')[0],
-        text: res[i]['Name'],
-        price: `${res[i]['Price']}`
-      });
-    }
-    console.log(dataArr)
-  })
-
-  for (let i = 1; i < 20; i++) {
-    dataArr.push({
-      id: `${i}`,
-      icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
-      text: `wine${i}`,
-      price: `${2 * i}`
-    });
-  }
-  //console.log(dataArr)
-  return dataArr;
-}
-
 class List extends React.Component {
   constructor(props) {
     super(props);
@@ -48,14 +17,17 @@ class List extends React.Component {
       down: false,
       height: document.documentElement.clientHeight,
       data: [],
+      hasMore: true,
+      reqNum: 0
     };
   }
   change(state){
     this.props.history.push({pathname:'/list/'+ state.id})
   }
-  genData(prev = []){
+  genData(prev = [],reqNum=0){
     dataArr = prev;
     query.limit(10);
+    query.skip(10*reqNum);
     query.find().then(res => {
       for (let i = 0; i < res.length; i++) {
         dataArr.push({
@@ -65,11 +37,21 @@ class List extends React.Component {
           price: `${res[i]['Price']}`
         });
       }
+      if(res.length<10){
+        this.setState({
+          hasMore: false
+        });
+        // document.querySelector('.am-pull-to-refresh-indicator').innerHTML = '我也是有底线的'
+        // document.querySelector('.am-pull-to-refresh-indicator').style.marginBottom = '0'
+        // document.querySelector('.am-pull-to-refresh-indicator').style.marginTop = '8px'
+        //this.refs.noMore.style.display = 'block'
+      }
       //console.log(dataArr)
     }).then(res=>{
         setTimeout(() => this.setState({
           height: hei,
           data: dataArr,
+          refreshing: false
         }), 0);
     })
   }
@@ -93,15 +75,16 @@ class List extends React.Component {
         direction={'up'}
         refreshing={this.state.refreshing}
         onRefresh={() => {
-          this.setState({
-            refreshing: true,
-            data: this.genData(this.state.data)
-          });
-          //this.setState({});
-          setTimeout(() => {
-            this.setState({ refreshing: false });
-          }, 1000);
+        
+          if(this.state.hasMore){
+            this.setState({
+              refreshing: true,
+              data: this.genData(this.state.data,this.state.reqNum+1)
+            });
+          }
+        
         }}
+      
       >
         {/* {this.state.data.map(i => (
           <div key={i} style={{ textAlign: 'center', padding: 20 }}>
@@ -118,10 +101,9 @@ class List extends React.Component {
                 <span>{dataItem.text}</span>
               </div>
               <div className="price">
-                <p>￥{dataItem.price}</p>
-                <div className="buy" onClick={() => this.change({ 'id': dataItem.id })}>立即购买</div>
-
-                <div style={{ clear: 'both' }}></div>
+                <p>价格：￥{dataItem.price}</p>
+                {/* <div className="buy" onClick={() => this.change({ 'id': dataItem.id })}>了解详情</div> */}
+                {/* <div style={{ clear: 'both' }}></div> */}
               </div>
             </div>
           )}

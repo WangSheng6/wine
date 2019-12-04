@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'amfe-flexible';
 //import App from './home/App';
 import * as serviceWorker from './serviceWorker';
 // 路由使用 history模式

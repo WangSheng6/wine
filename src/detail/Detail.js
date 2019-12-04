@@ -1,6 +1,6 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
-import { Carousel, WingBlank, Card, WhiteSpace } from 'antd-mobile';
+import { Carousel, WingBlank, Card, WhiteSpace, Icon } from 'antd-mobile';
 import './Detail.css';
 import Bmob from "hydrogen-js-sdk";
 Bmob.initialize("57b561f7d48f3c2e", "191019");
@@ -13,77 +13,49 @@ class Detail extends React.Component {
             data: {},
             banner: [],
             intro: [],
-            imgHeight: 176
+            imgHeight: 176,
+            loading: true
         };
     }
 
     componentDidMount() {
         const query = Bmob.Query("wine");
-        query.equalTo("goodsID", "==", this.state.goodsID*1);
+        query.equalTo("goodsID", "==", this.state.goodsID * 1);
         query.find().then(res => {
-            //console.log(res)
 
             const data = res[0]
-            console.log(data)
             setTimeout(() => {
                 this.setState({
                     data: data,
                     banner: data.Banner.split('||'),
-                    intro: data.intro.split('||')
+                    intro: data.intro.split('||'),
+                    loading: false
                 });
             }, 100);
         });
-        
+
     }
 
     render() {
         return (
             <div style={{ paddingTop: '15px' }}>
-                <WingBlank>
-                    <Carousel
-                        autoplay={false}
-                        infinite
-                        beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-                        afterChange={index => console.log('slide to', index)}
-                    >
-                        {this.state.banner.map(val => (
-                            <a
-                                key={val}
-                                href="http://www.alipay.com"
-                                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
+                {this.state.loading ? <div className="loading"><Icon type="loading" /><p className="text">数据加载中...</p></div> :
+                    <div>
+                        <WingBlank>
+                            <Carousel
+                                autoplay={false}
+                                infinite
+                                beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
+                                afterChange={index => console.log('slide to', index)}
                             >
-                                <img
-                                    src={val}
-                                    alt=""
-                                    style={{ width: '100%', verticalAlign: 'top' }}
-                                    onLoad={() => {
-                                        // fire window resize event to change height
-                                        window.dispatchEvent(new Event('resize'));
-                                        this.setState({ imgHeight: 'auto' });
-                                    }}
-                                />
-                            </a>
-                        ))}
-                    </Carousel>
-                </WingBlank>
-                <h3>{this.state.data.Name}</h3>
-                <p>￥{this.state.data.Price}</p>
-                <WingBlank size="lg">
-                    <WhiteSpace size="lg" />
-                    <Card>
-                        <Card.Header
-                            title="商品详情"
-                        />
-                        <Card.Body>
-                            <div>
-                                {this.state.intro.map(val => (
+                                {this.state.banner.map(val => (
                                     <a
                                         key={val}
-                                        href="http://www.alipay.com"
+                                        href="javascript: void(0)"
                                         style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                                     >
                                         <img
-                                            src={`${val}`}
+                                            src={val}
                                             alt=""
                                             style={{ width: '100%', verticalAlign: 'top' }}
                                             onLoad={() => {
@@ -94,13 +66,46 @@ class Detail extends React.Component {
                                         />
                                     </a>
                                 ))}
-                            </div>
-                        </Card.Body>
+                            </Carousel>
+                        </WingBlank>
+                        <h3>{this.state.data.Name}</h3>
+                        <p>￥{this.state.data.Price}</p>
+                        <WingBlank size="lg">
+                            <WhiteSpace size="lg" />
+                            <Card>
+                                <Card.Header
+                                    title="商品详情"
+                                />
+                                <Card.Body>
+                                    <div>
+                                        {this.state.intro.map(val => (
+                                            <a
+                                                key={val}
+                                                href="javascript: void(0)"
+                                                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
+                                            >
+                                                <img
+                                                    src={`${val}`}
+                                                    alt=""
+                                                    style={{ width: '100%', verticalAlign: 'top' }}
+                                                    onLoad={() => {
+                                                        // fire window resize event to change height
+                                                        window.dispatchEvent(new Event('resize'));
+                                                        this.setState({ imgHeight: 'auto' });
+                                                    }}
+                                                />
+                                            </a>
+                                        ))}
+                                    </div>
+                                </Card.Body>
 
-                    </Card>
-                    <WhiteSpace size="lg" />
-                </WingBlank>
-                
+                            </Card>
+                            <WhiteSpace size="lg" />
+                        </WingBlank>
+                    </div>
+                }
+
+
             </div>
         )
     }
