@@ -20,6 +20,7 @@ class List extends React.Component {
       hasMore: true,
       reqNum: 0
     };
+    window.document.title = '商品列表'
   }
   change(state){
     this.props.history.push({pathname:'/list/'+ state.id})

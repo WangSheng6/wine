@@ -16,6 +16,7 @@ class Detail extends React.Component {
             imgHeight: 176,
             loading: true
         };
+        window.document.title = '商品详情'
     }
 
     componentDidMount() {
