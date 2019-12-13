@@ -3,7 +3,7 @@ import React from 'react';
 import { Carousel, WingBlank, Card, WhiteSpace, Icon } from 'antd-mobile';
 import './Detail.css';
 import Bmob from "hydrogen-js-sdk";
-Bmob.initialize("57b561f7d48f3c2e", "191019");
+Bmob.initialize("Secret Key", "API安全码");
 
 class Detail extends React.Component {
     constructor(props) {
